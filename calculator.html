@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+    <style>
+        table {
+            margin: 50px auto;
+            border-collapse: collapse;
+        }
+        td {
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            font-size: 20px;
+        }
+        input {
+            width: 100%;
+            font-size: 24px;
+            text-align: right;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <table border="1">
+        <tr>
+            <td colspan="4">
+                <input type="text" id="inputBox" value="0" readonly />
+            </td>
+        </tr>
+        <tr>
+            <td onclick="appendNumber('7')">7</td>
+            <td onclick="appendNumber('8')">8</td>
+            <td onclick="appendNumber('9')">9</td>
+            <td onclick="chooseOperator('*')">x</td>
+        </tr>
+        <tr>
+            <td onclick="appendNumber('4')">4</td>
+            <td onclick="appendNumber('5')">5</td>
+            <td onclick="appendNumber('6')">6</td>
+            <td onclick="chooseOperator('-')">-</td>
+        </tr>
+        <tr>
+            <td onclick="appendNumber('1')">1</td>
+            <td onclick="appendNumber('2')">2</td>
+            <td onclick="appendNumber('3')">3</td>
+            <td onclick="chooseOperator('+')">+</td>
+        </tr>
+        <tr>
+            <td colspan="2" onclick="appendNumber('0')">0</td>
+            <td onclick="clearInput()">AC</td>
+            <td onclick="chooseOperator('/')">/</td>
+        </tr>
+        <tr>
+            <td colspan="4" onclick="calculate()">=</td>
+        </tr>
+    </table>
+
+    <script>
+        let currentInput = '';
+        let previousInput = null;
+        let operator = null;
+
+        function appendNumber(num) {
+            const display = document.getElementById("inputBox");
+
+            if (display.value === '0' || operatorClicked) {
+                display.value = num;
+                operatorClicked = false;
+            } else {
+                display.value += num;
+            }
+
+            currentInput = display.value;
+        }
+
+        function clearInput() {
+            document.getElementById("inputBox").value = '0';
+            currentInput = '';
+            previousInput = null;
+            operator = null;
+        }
+
+        let operatorClicked = false;
+
+        function chooseOperator(op) {
+            previousInput = parseFloat(document.getElementById("inputBox").value);
+            operator = op;
+            operatorClicked = true;
+        }
+
+        function calculate() {
+            const display = document.getElementById("inputBox");
+            const current = parseFloat(display.value);
+
+            if (operator && previousInput != null) {
+                let result;
+
+                switch (operator) {
+                    case '+':
+                        result = previousInput + current;
+                        break;
+                    case '-':
+                        result = previousInput - current;
+                        break;
+                    case '*':
+                        result = previousInput * current;
+                        break;
+                    case '/':
+                        result = current !== 0 ? previousInput / current : "Error";
+                        break;
+                }
+
+                display.value = result;
+                currentInput = '';
+                previousInput = null;
+                operator = null;
+            }
+        }
+    </script>
+
+</body>
+</html>
